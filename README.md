@@ -1,6 +1,6 @@
 # Enlive
 
-[![Tests](https://github.com/connecty-ai/enlive/actions/workflows/test.yml/badge.svg)](https://github.com/connecty-ai/enlive/actions/workflows/test.yml)
+[![Tests](https://github.com/Connecty/enlive/actions/workflows/test.yml/badge.svg)](https://github.com/Connecty/enlive/actions/workflows/test.yml)
 
 Enlive is a selector-based (à la CSS) templating library for Clojure.
 
@@ -24,7 +24,7 @@ See [CHANGELOG.md](CHANGELOG.md) for detailed changes.
 
 ```clojure
 ;; deps.edn
-io.github.connecty-ai/enlive {:git/tag "v2.0.0" :git/sha "..."}
+io.github.Connecty/enlive {:git/tag "v2.0.0" :git/sha "a78a175"}
 
 ;; or for Leiningen (once published to Clojars)
 [org.connecty/enlive "2.0.0"]
@@ -40,7 +40,7 @@ There's a quickstart section in [Clojure Cookbook](https://github.com/clojure-co
 
 ## Where do I get support?
 
-- [GitHub Issues](https://github.com/connecty-ai/enlive/issues) for this fork
+- [GitHub Issues](https://github.com/Connecty/enlive/issues) for this fork
 - [Enlive Google Group](http://groups.google.com/group/enlive-clj) for general discussion
 
 ### Auto-reloading (1.1.2)
