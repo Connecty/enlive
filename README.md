@@ -27,7 +27,7 @@ See [CHANGELOG.md](CHANGELOG.md) for detailed changes.
 io.github.Connecty/enlive {:git/tag "v2.0.0" :git/sha "a78a175"}
 
 ;; or for Leiningen (once published to Clojars)
-[org.connecty/enlive "2.0.0"]
+[io.github.connecty/enlive "2.0.0"]
 ```
 
 ## Tutorials
