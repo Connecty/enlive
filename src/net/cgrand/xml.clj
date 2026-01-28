@@ -73,13 +73,14 @@
         (let [^DefaultHandler2 this this]
           (proxy-super resolveEntity publicId systemId))))))
 
-(defn startparse-sax [s ch]
+(defn startparse-sax [^org.xml.sax.InputSource s ^org.xml.sax.helpers.DefaultHandler ch]
   (-> (SAXParserFactory/newInstance)
    (doto
      (.setValidating false)
      (.setFeature "http://xml.org/sax/features/external-general-entities" false)
      (.setFeature "http://xml.org/sax/features/external-parameter-entities" false)) 
    .newSAXParser
+   ^SAXParser
    (doto
      (.setProperty "http://xml.org/sax/properties/lexical-handler" ch))
    (.parse s ch)))

@@ -1,0 +1,50 @@
+name: Tests
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        java: ['11', '17', '21']
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: ${{ matrix.java }}
+      
+      - name: Setup Clojure
+        uses: DeLaGuardo/setup-clojure@12.5
+        with:
+          cli: 'latest'
+      
+      - name: Cache Clojure dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.m2/repository
+            ~/.gitlibs
+            ~/.clojure
+          key: ${{ runner.os }}-clojure-${{ hashFiles('deps.edn') }}
+          restore-keys: |
+            ${{ runner.os }}-clojure-
+      
+      - name: Run tests
+        run: clojure -X:test
+      
+      - name: Check for reflection warnings
+        run: |
+          clojure -M -e "(set! *warn-on-reflection* true) (require '[net.cgrand.enlive-html] '[net.cgrand.tagsoup] '[net.cgrand.xml] '[net.cgrand.jsoup])" 2>&1 | tee /tmp/warnings.txt
+          if grep -q "Reflection warning" /tmp/warnings.txt; then
+            echo "Reflection warnings found!"
+            exit 1
+          fi

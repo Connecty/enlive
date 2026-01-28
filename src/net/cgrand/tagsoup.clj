@@ -9,9 +9,10 @@
 ;   You must not remove this notice, or any other, from this software.
 
 (ns net.cgrand.tagsoup
-  (:require [net.cgrand.xml :as xml]))
+  (:require [net.cgrand.xml :as xml])
+  (:import [java.util MissingResourceException]))
 
-(defn- startparse-tagsoup [s ch]
+(defn- startparse-tagsoup [^org.xml.sax.InputSource s ch]
   (doto (org.ccil.cowan.tagsoup.Parser.)
     (.setFeature "http://www.ccil.org/~cowan/tagsoup/features/default-attributes" false)
     (.setFeature "http://www.ccil.org/~cowan/tagsoup/features/cdata-elements" true)
@@ -24,12 +25,27 @@
     (.setProperty "http://xml.org/sax/properties/lexical-handler" ch)
     (.parse s)))
 
+(defn- make-input-source
+  "Create an InputSource from a stream or reader."
+  [source]
+  (cond
+    (instance? java.io.InputStream source)
+    (org.xml.sax.InputSource. ^java.io.InputStream source)
+    (instance? java.io.Reader source)
+    (org.xml.sax.InputSource. ^java.io.Reader source)
+    :else
+    (throw (IllegalArgumentException. 
+             (str "Expected InputStream or Reader, got: " (type source))))))
+
 (defn parser 
  "Loads and parse an HTML resource and closes the stream."
  [stream]
   (when-not stream 
-    (throw (NullPointerException. "HTML resource not found.")))
+    (throw (MissingResourceException. 
+             "HTML resource not found. Note: resource paths are resolved from the classpath, not the filesystem. Use (clojure.java.io/resource \"path\") to verify your resource exists."
+             "net.cgrand.tagsoup"
+             "")))
   (filter map?
     (with-open [^java.io.Closeable stream stream]
-      (xml/parse (org.xml.sax.InputSource. stream) startparse-tagsoup))))
+      (xml/parse (make-input-source stream) startparse-tagsoup))))
 

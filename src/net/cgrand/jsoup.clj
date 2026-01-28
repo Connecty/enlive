@@ -16,7 +16,7 @@
             DocumentType Element Node TextNode XmlDeclaration]
            [org.jsoup.parser Parser Tag]))
 
-(def ^:private ->key (comp keyword #(.. % toString toLowerCase)))
+(def ^:private ->key (comp keyword #(.toLowerCase ^String (.toString ^Object %))))
 
 (defprotocol IEnlive
   (->nodes [d] "Convert object into Enlive node(s)."))
@@ -53,7 +53,16 @@
 
 
 (defn parser
-  "Parse a HTML document stream into Enlive nodes using JSoup."
+  "Parse a HTML document stream into Enlive nodes using JSoup.
+   Supports InputStream and Reader."
   [stream]
   (with-open [^java.io.Closeable stream stream]
-    (->nodes (Jsoup/parse stream "UTF-8" ""))))
+    (cond
+      (instance? java.io.InputStream stream)
+      (->nodes (Jsoup/parse ^java.io.InputStream stream "UTF-8" ""))
+      (instance? java.io.Reader stream)
+      (let [content (slurp stream)]
+        (->nodes (Jsoup/parse ^String content "")))
+      :else
+      (throw (IllegalArgumentException.
+               (str "Expected InputStream or Reader, got: " (type stream)))))))

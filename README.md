@@ -1,6 +1,36 @@
-# Enlive [![Build Status](https://travis-ci.org/cgrand/enlive.png?branch=master)](https://travis-ci.org/cgrand/enlive)
+# Enlive
+
+[![Tests](https://github.com/connecty-ai/enlive/actions/workflows/test.yml/badge.svg)](https://github.com/connecty-ai/enlive/actions/workflows/test.yml)
 
 Enlive is a selector-based (à la CSS) templating library for Clojure.
+
+> **Note**: This is a community fork of [cgrand/enlive](https://github.com/cgrand/enlive), 
+> which has been unmaintained since 2019. This fork includes dependency updates,
+> bug fixes, and modern JVM compatibility improvements.
+
+## What's New in This Fork
+
+See [CHANGELOG.md](CHANGELOG.md) for detailed changes.
+
+**2.0.0 Highlights:**
+- Fixed all reflection warnings for JDK 11+ compatibility
+- Updated jsoup to 1.18.3
+- Added missing HTML5 void elements (`<col>`, `<embed>`, etc.)
+- JSoup parser now works with `html-snippet`
+- Improved error messages for missing resources
+- GitHub Actions CI with Java 11/17/21 testing
+
+## Artifact
+
+```clojure
+;; deps.edn
+io.github.connecty-ai/enlive {:git/tag "v2.0.0" :git/sha "..."}
+
+;; or for Leiningen (once published to Clojars)
+[org.connecty/enlive "2.0.0"]
+```
+
+## Tutorials
 
 David Nolen wrote a [nice tutorial](http://github.com/swannodette/enlive-tutorial/).
 
@@ -10,23 +40,8 @@ There's a quickstart section in [Clojure Cookbook](https://github.com/clojure-co
 
 ## Where do I get support?
 
-On the [Enlive Google Group](http://groups.google.com/group/enlive-clj)
-
-## Artifact
-
-All artifacts are published to [clojars](https://clojars.org/enlive). Latest version is `1.1.6`:
-
-```
-[enlive "1.1.6"]
-```
-
-## What's new in Enlive?
-
-(most recent first)
-
-1.1.6:
-- ADD: exception message when html-resource not found.
-- FIX: auto-reload on windows (also works with chestnut).
+- [GitHub Issues](https://github.com/connecty-ai/enlive/issues) for this fork
+- [Enlive Google Group](http://groups.google.com/group/enlive-clj) for general discussion
 
 ### Auto-reloading (1.1.2)
 

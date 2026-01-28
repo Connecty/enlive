@@ -48,11 +48,23 @@
   [parser]
   (alter-ns-options! assoc :parser parser))
 
+(defn- make-input-source
+  "Create an InputSource from a stream or reader."
+  [source]
+  (cond
+    (instance? java.io.InputStream source)
+    (org.xml.sax.InputSource. ^java.io.InputStream source)
+    (instance? java.io.Reader source)
+    (org.xml.sax.InputSource. ^java.io.Reader source)
+    :else
+    (throw (IllegalArgumentException. 
+             (str "Expected InputStream or Reader, got: " (type source))))))
+
 (defn xml-parser
  "Loads and parse a XML resource and closes the stream."
  [stream]
   (with-open [^java.io.Closeable stream stream]
-    (xml/parse (org.xml.sax.InputSource. stream))))
+    (xml/parse (make-input-source stream))))
 
 (defmulti ^{:arglists '([resource loader])} get-resource
  "Loads a resource, using the specified loader. Returns a seq of nodes."
@@ -129,7 +141,10 @@
  [x]
   (-> x str (.replace "&" "&amp;") (.replace "<" "&lt;") (.replace ">" "&gt;") (.replace "\"" "&quot;")))
 
-(def self-closing-tags #{:area :base :basefont :br :hr :input :img :link :meta})
+(def self-closing-tags 
+  "HTML void elements that must not have an end tag.
+   See: https://html.spec.whatwg.org/multipage/syntax.html#void-elements"
+  #{:area :base :basefont :br :col :embed :hr :img :input :keygen :link :meta :param :source :track :wbr})
 
 (declare emit)
 
