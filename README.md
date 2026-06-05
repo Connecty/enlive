@@ -30,6 +30,53 @@ io.github.Connecty/enlive {:git/tag "v2.0.0" :git/sha "a78a175"}
 [io.github.connecty/enlive "2.0.0"]
 ```
 
+## Deployment
+
+### Build a JAR
+
+```bash
+clj -T:build jar
+# => target/enlive-<version>.jar
+```
+
+### Deploy to AWS CodeArtifact
+
+1. Set placeholders in `build.clj` (`codeartifact-defaults`) for `domain`,
+   `domain-owner` (AWS account ID), `region`, and `repository` — or supply
+   them via the env vars / CLI args shown below.
+
+2. Obtain an authorization token and export it:
+
+   ```bash
+   export CODEARTIFACT_AUTH_TOKEN=$(aws codeartifact get-authorization-token \
+     --domain <domain> --domain-owner <account-id> \
+     --query authorizationToken --output text)
+   ```
+
+3. Deploy:
+
+   ```bash
+   # use defaults from build.clj
+   clj -T:build deploy-codeartifact
+
+   # or override via env vars
+   CODEARTIFACT_DOMAIN=mydomain \
+   CODEARTIFACT_DOMAIN_OWNER=123456789012 \
+   CODEARTIFACT_REGION=ap-northeast-1 \
+   CODEARTIFACT_REPOSITORY=myrepo \
+     clj -T:build deploy-codeartifact
+
+   # or pass args directly
+   clj -T:build deploy-codeartifact \
+     :domain '"mydomain"' \
+     :domain-owner '"123456789012"' \
+     :region '"ap-northeast-1"' \
+     :repository '"myrepo"'
+   ```
+
+Precedence: env vars > CLI args > `codeartifact-defaults` in `build.clj`.
+Set `CODEARTIFACT_REPO_URL` to override the full repository URL directly.
+
 ## Tutorials
 
 David Nolen wrote a [nice tutorial](http://github.com/swannodette/enlive-tutorial/).

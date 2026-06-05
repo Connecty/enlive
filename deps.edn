@@ -10,8 +10,9 @@
          :main-opts ["-m" "cognitect.test-runner"]
          :exec-fn cognitect.test-runner.api/test}
   
-  ;; Build JAR
-  :build {:deps {io.github.clojure/tools.build {:mvn/version "0.10.6"}}
+  ;; Build JAR / deploy
+  :build {:deps {io.github.clojure/tools.build {:mvn/version "0.10.6"}
+                 slipset/deps-deploy {:mvn/version "0.2.2"}}
           :ns-default build}
   
   ;; Deploy to Clojars
