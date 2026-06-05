@@ -41,6 +41,11 @@ clj -T:build jar
 
 ### Deploy to AWS CodeArtifact
 
+> Consumer-side setup (Maven `settings.xml`, Leiningen `profiles.clj`, npm `.npmrc`)
+> for the internal `lotus-dev` CodeArtifact is documented in
+> [`Connecty/infra` → `aws/terraform/codeartifact/README.md`](https://github.com/Connecty/infra/blob/master/aws/terraform/codeartifact/README.md#ローカル開発機からの利用-consume--publish).
+> The publish steps below assume that token / repository config is in place.
+
 1. Set placeholders in `build.clj` (`codeartifact-defaults`) for `domain`,
    `domain-owner` (AWS account ID), `region`, and `repository` — or supply
    them via the env vars / CLI args shown below.
